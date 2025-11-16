@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Someone Special 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: crosshair;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .image-container.has-image img {
+            display: block;
+        }
+
+        .image-container.has-image .placeholder {
+            display: none;
+        }
+
+        .compliment {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 18px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.95em;
+            color: #333;
+            pointer-events: none;
+            animation: fadeIn 0.5s ease-in-out;
+            max-width: 200px;
+            text-align: center;
+            transform: translate(-50%, -50%);
+        }
+
+        .compliment::before {
+            content: '💖';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .info {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .image-container {
+                height: 300px;
+            }
+
+            .compliment {
+                font-size: 0.85em;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💕 Something Special 💕</h1>
+        <p class="subtitle">Click anywhere to add a compliment!</p>
+        
+        <div class="image-container" id="imageContainer">
+            <div class="placeholder">
+                Click "Upload Picture" below to add your crush's photo 📸
+            </div>
+            <img id="crushImage" alt="Special person">
+        </div>
+
+        <div class="controls">
+            <button onclick="document.getElementById('imageUpload').click()">Upload Picture</button>
+            <button onclick="clearCompliments()">Clear All</button>
+            <button onclick="downloadImage()">Save as Image</button>
+        </div>
+        <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)">
+        
+        <p class="info">💡 Tip: Drag or click to place compliments. Each click shows a new sweet message!</p>
+        <p class="info" style="font-weight: bold;">
+            Made with ❤️ By 
+            <a href="https://github.com/sujalrajpoot" style="text-decoration: none; color: inherit;">
+                @sujalrajpoot
+            </a>
+        </p>
+    </div>
+    <script>
+        const compliments = [
+            "Your smile lights up my entire world 🌎✨",
+            "You're breathtakingly beautiful, inside and out 💖",
+            "Your laugh is my favorite melody 🎶💫",
+            "Everything feels right when you’re near me 🤍",
+            "You’re the definition of perfection in my eyes 👑💞",
+            "Your eyes tell stories that words never could 🌌👁️",
+            "You’re one in a million — truly irreplaceable 🌷",
+            "You inspire me to become a better version of myself 🌟",
+            "Your kindness touches my soul every single day 💕",
+            "You’re not just perfect — you’re my perfect 💓",
+            "My heart literally skips a beat when I see you 💗",
+            "Your energy is so vibrant, it brightens everything around 💫",
+            "You’re a masterpiece that the universe painted beautifully 🎨✨",
+            "You make every place feel like home 🏡💞",
+            "You’re my reason to smile on hard days 🌤️💛",
+            "Your presence feels like sunshine after a storm ☀️🌈",
+            "You’re wonderfully and unapologetically you 🌺",
+            "You make ordinary moments feel magical 🌙💫",
+            "Your spirit shines brighter than the stars ✨🌌",
+            "You’re my favorite kind of beautiful — the soulful kind 💗",
+            "Every time I look at you, I fall all over again 💞",
+            "You have a heart that radiates pure gold 💛✨",
+            "You bring peace to my chaos 🌿💫",
+            "Your voice feels like a comforting hug 🤍🎧",
+            "You’re not just beautiful — you’re breathtakingly real 💓",
+            "You make my world bloom like spring 🌸🌷",
+            "The way you care melts me completely 💕",
+            "Your smile could heal a thousand hearts 💫😊",
+            "You’re my calm in a world full of noise 🌤️💖",
+            "You have the kind of beauty that words can’t define 🌹",
+            "You make my heart feel weightless 💞🌙",
+            "You’re the kind of person poems are written about 📖❤️",
+            "Every little thing about you feels like magic ✨💘",
+            "Your soul glows in the most beautiful way 💫🌼",
+            "You make time stop when you walk into a room ⏳💖",
+            "You’re my favorite chapter in this story of life 📚💞",
+            "Your laugh could light up the darkest night 🌃😂",
+            "You’re effortlessly extraordinary 🌸🌟",
+            "You have a way of making hearts feel safe 💕",
+            "You’re beauty, warmth, and love — all in one 💖🔥",
+            "You’re the dream I never want to wake up from 🌙💭",
+            "Every glance from you feels like a blessing 🙏💘",
+            "You make every moment unforgettable 💫🕰️",
+            "You’re not just special — you’re sacred to me 🌹🤍",
+            "You have a soul that could move mountains 🌄💞",
+            "You’re pure art in motion 🎨💃",
+            "You make the universe feel smaller when you smile 🌌😊",
+            "You bring color to my grey days 🌈💗",
+            "You’re my favorite person to think about 💭💞",
+            "Your warmth could melt even the coldest heart ❄️❤️",
+            "You make love feel easy 💕🌿",
+            "You have a light that no darkness can dim 🌟✨",
+            "You’re my forever kind of person 💍💖",
+            "Your eyes are galaxies waiting to be explored 🌌👁️",
+            "You make silence sound beautiful 🌙🤍",
+            "You’re the peace I didn’t know I was searching for 🌾💫",
+            "You have an aura that’s pure magic ✨💜",
+            "You’re the sweetest part of my every day 🍯💞",
+            "You make everything feel possible 💫❤️",
+            "You’re the heartbeat I never want to stop feeling 💓🎵",
+            "You have a laugh that could cure sadness 😂🌸",
+            "You’re made of stardust and dreams 🌠💗",
+            "You make my soul feel understood 💕🌙",
+            "You’re beauty and grace woven together 🌷💫",
+            "You’re my favorite kind of peace ☕🤍",
+            "You bring warmth wherever you go 🔥🌹",
+            "You’re proof that angels exist 😇💖",
+            "You’re the calm in my storm 🌧️➡️☀️",
+            "Your presence feels like a gentle sunrise 🌅💛",
+            "You’re the poetry my heart keeps writing ✍️❤️",
+            "You make the world softer just by being in it 🌸💞",
+            "You’re love in human form 💖✨",
+            "You have a soul made of light 🌟🤍",
+            "You’re the melody that completes my song 🎶💗",
+            "You make my heart feel at home 🏡💞",
+            "You’re more than words could ever express 💬💖",
+            "You’re the miracle I didn’t know I needed 🌠❤️",
+            "You make even the stars jealous 🌌💫",
+            "You’re my favorite adventure 🌍💞",
+            "Your heart is the most beautiful place I’ve ever known 💓🌸",
+            "You make love look effortless 💕🌿",
+            "You’re the reason I believe in magic again ✨🪄",
+            "You’re like a warm blanket on a cold night ❄️❤️",
+            "You’re my sunshine and my moonlight ☀️🌙",
+            "You have a glow that lights up souls ✨💫",
+            "You make time feel like a gift 🎁💞",
+            "You’re endlessly precious to me 💖🌹",
+            "You’re the light that guides me home 🕯️🤍",
+            "You’re love wrapped in a heartbeat 💓💫",
+            "You make my world brighter every single day 🌞💛",
+            "You’re pure magic in motion 🌙💫",
+            "You’re a piece of heaven sent to Earth 😇💞",
+            "You’re my favorite hello and hardest goodbye 👋💔",
+            "You make my heart smile 💓😊",
+            "You’re the reason my world feels alive 🌍💫",
+            "You’re my dream come true 🌙💖",
+            "You’re the sparkle in my everyday ✨💗",
+            "You’re the reason my heart knows what love feels like 💞🔥",
+            "You’re my forever muse 🎨❤️"
+        ];
+
+        let usedCompliments = [];
+        let complimentsData = [];
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('crushImage');
+                    const container = document.getElementById('imageContainer');
+                    img.src = e.target.result;
+                    container.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function getRandomCompliment() {
+            if (usedCompliments.length === compliments.length) {
+                usedCompliments = [];
+            }
+            
+            const availableCompliments = compliments.filter(c => !usedCompliments.includes(c));
+            const randomIndex = Math.floor(Math.random() * availableCompliments.length);
+            const compliment = availableCompliments[randomIndex];
+            
+            usedCompliments.push(compliment);
+            return compliment;
+        }
+
+        document.getElementById('imageContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const complimentText = getRandomCompliment();
+            const complimentDiv = document.createElement('div');
+            complimentDiv.className = 'compliment';
+            complimentDiv.textContent = complimentText;
+            complimentDiv.style.left = x + 'px';
+            complimentDiv.style.top = y + 'px';
+            
+            this.appendChild(complimentDiv);
+            
+            complimentsData.push({
+                text: complimentText,
+                x: x,
+                y: y
+            });
+        });
+
+        function clearCompliments() {
+            const container = document.getElementById('imageContainer');
+            const compliments = container.querySelectorAll('.compliment');
+            compliments.forEach(c => c.remove());
+            complimentsData = [];
+            usedCompliments = [];
+        }
+
+        function downloadImage() {
+            const container = document.getElementById('imageContainer');
+            const img = document.getElementById('crushImage');
+            
+            if (!img.src || img.src === window.location.href) {
+                alert('Please upload an image first!');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            
+            const image = new Image();
+            image.crossOrigin = 'anonymous';
+            image.onload = function() {
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                
+                ctx.font = '16px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                complimentsData.forEach(comp => {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                    ctx.lineWidth = 2;
+                    
+                    const padding = 15;
+                    const textMetrics = ctx.measureText(comp.text);
+                    const textWidth = textMetrics.width;
+                    const boxWidth = textWidth + (padding * 2);
+                    const boxHeight = 40;
+                    
+                    const x = comp.x - boxWidth / 2;
+                    const y = comp.y - boxHeight / 2;
+                    
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, boxWidth, boxHeight, 20);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(comp.text, comp.x, comp.y);
+                    
+                    ctx.font = '20px Segoe UI';
+                    ctx.fillText('💖', comp.x, comp.y - 25);
+                    ctx.font = '16px Segoe UI';
+                });
+                
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'special-compliments.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            };
+            image.src = img.src;
+        }
+
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (w < 2 * r) r = w / 2;
+                if (h < 2 * r) r = h / 2;
+                this.beginPath();
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                this.closePath();
+                return this;
+            };
+        }
+    </script>
+</body>
+</html>
